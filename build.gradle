@@ -1,12 +1,68 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 version = '1.0'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+    distributionUrl = 'http\\://services.gradle.org/distributions/gradle-2.4-bin.zip'
+}
+
+configurations { providedRuntime }
+
+sourceSets.main.compileClasspath += configurations.providedRuntime
+
+// Define versions used in 2+ places
+def versions = [
+        guava: "16.0.1",
+        tomcat: "8.0.14",
+        slf4j: "1.7.5",
+        spring: "4.1.1.RELEASE",
+        springBoot: "1.1.8.RELEASE",
+        springSecurity: "3.2.5.RELEASE"
+]
+
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.projectlombok', name: 'lombok', version: "1.14.4"
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: "${versions.slf4j}"
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${versions.slf4j}"
+
+    compile group: 'com.google.guava', name: 'guava', version: "${versions.guava}"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: "3.3.2"
+    compile group: 'org.springframework', name: 'spring-core', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-aop', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-beans', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-web', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-webmvc', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-tx', version: "${versions.spring}"
+    compile group: 'org.springframework', name: 'spring-context', version: "${versions.spring}"
+
+    compile group: 'org.springframework', name: 'spring-context-support', version: "${versions.spring}"
+
+    compile group: 'org.springframework.plugin', name: 'spring-plugin-core', version: "0.8.0.RELEASE"
+    compile group: 'org.springframework.boot', name: 'spring-boot', version: "${versions.springBoot}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version: "${versions.springBoot}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: "${versions.springBoot}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "${versions.springBoot}"
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${versions.springBoot}"
+
+    providedRuntime "org.apache.tomcat.embed:tomcat-embed-core:${versions.tomcat}"
+    providedRuntime "org.apache.tomcat.embed:tomcat-embed-logging-juli:${versions.tomcat}"
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${versions.springBoot}"
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: "${versions.springSecurity}"
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: "${versions.springSecurity}"
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: "${versions.springSecurity}"
+
+
+    testCompile group: 'org.testng', name: 'testng', version: "6.8.1"
+    testCompile group: 'org.mockito', name: 'mockito-all', version: "1.9.5"
+    testCompile group: 'org.springframework', name: 'spring-test', version: "${versions.spring}"
 }
